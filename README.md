@@ -6,7 +6,7 @@ demo for runc
 ```shell
 sh build.sh
 ```
-the you will get an executable binary file:main
+then you will get an executable binary file:main
 2. exec the main file 
 ```shell
 sudo ./main run -ti /bin/bash
