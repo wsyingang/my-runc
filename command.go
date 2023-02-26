@@ -33,7 +33,7 @@ func NewParentProcess(cmd string, tty bool) *exec.Cmd {
 	args := []string{"init", cmd}
 	process := exec.Command("/proc/self/exe", args...)
 	process.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWPID | syscall.CLONE_NEWUTS,
+		Cloneflags: syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
 	}
 	if tty {
 		process.Stdin = os.Stdin
@@ -63,7 +63,7 @@ var initCommand = cli.Command{
 
 func RunInitProcess(cmd string, args []string) error {
 	log.Printf("run init porocess,cmd=%s", cmd)
-	defaultMountArgs := syscall.MS_NOSUID | syscall.MS_NOEXEC | syscall.MS_NODEV
+	defaultMountArgs := syscall.MS_NOSUID | syscall.MS_NOEXEC | syscall.MS_NODEV | syscall.MS_PRIVATE
 	syscall.Mount("proc", "/proc", "proc", uintptr(defaultMountArgs), "")
 	argv := []string{cmd}
 	if err := syscall.Exec(cmd, argv, os.Environ()); err != nil {
